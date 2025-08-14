@@ -1,0 +1,22 @@
+﻿@page
+@model BankApp.Pages.BankModel
+@{
+    ViewData["Title"] = "Simple Bank Page";
+}
+
+<h2>Simple Bank System</h2>
+
+<p><strong>Current Balance:</strong> ₹@Model.CurrentBalance</p>
+
+<form method="post">
+    <label>Enter Amount:</label>
+    <input asp-for="Amount" type="number" step="0.01" /><br /><br />
+
+    <button type="submit" asp-page-handler="Deposit">Deposit</button>
+    <button type="submit" asp-page-handler="Withdraw">Withdraw</button>
+</form>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <p><strong>@Model.Message</strong></p>
+}

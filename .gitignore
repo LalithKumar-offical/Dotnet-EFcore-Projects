@@ -1,0 +1,25 @@
+ 
+
+       
+# Ignore build folders globally (bin/obj in any subfolder)
+**/bin/
+**/obj/
+
+# Ignore Visual Studio solution files
+*.sln
+
+# Ignore user-specific VS files
+*.user
+*.suo
+
+# Ignore .zip files (like RazorPagesTesting.zip)
+*.zip
+
+# Ignore packages folder
+**/packages/
+
+# Ignore logs and temp files
+*.log
+*.tmp
+
+.vs/
