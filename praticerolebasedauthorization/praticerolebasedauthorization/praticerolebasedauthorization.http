@@ -1,0 +1,6 @@
+@praticerolebasedauthorization_HostAddress = http://localhost:5074
+
+GET {{praticerolebasedauthorization_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
