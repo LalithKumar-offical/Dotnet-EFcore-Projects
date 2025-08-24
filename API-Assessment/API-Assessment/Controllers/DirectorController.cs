@@ -106,10 +106,7 @@ namespace API_Assessment.Controllers
         {
             try
             {
-                // Retrieve all directors first
                 var allDirectors = await _genericservice.GetAll();
-
-                // Then, perform the filtering and conversion in-memory
                 var experiencedDirectors = allDirectors
                     .Where(d => int.TryParse(d.DirectorExperience, out var experienceValue) && experienceValue > minExperience)
                     .ToList();
@@ -126,5 +123,51 @@ namespace API_Assessment.Controllers
                 return BadRequest($"An error occurred: {ex.Message}");
             }
         }
+        [HttpGet("count")]
+        public async Task<IActionResult> GetDirectorsCount()
+        {
+            try
+            {
+                var directors = await _genericservice.GetAll();
+                int total = directors.Count();
+
+                return Ok(new { TotalDirectors = total });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
+        }
+        [HttpGet("search/{name}")]
+        public async Task<IActionResult> SearchByName(string name)
+        {
+            var directors = await _genericservice.GetAll();
+            var result = directors
+                .Where(d => d.DirectorName.Contains(name, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (!result.Any())
+                return NotFound($"No directors found with name containing '{name}'");
+
+            return Ok(result);
+        }
+        [HttpGet("sort/{field}/{order}")]
+        public async Task<IActionResult> Sort(string field, string order = "asc")
+        {
+            var directors = await _genericservice.GetAll();
+
+            var sorted = field.ToLower() switch
+            {
+                "age" => order == "desc" ? directors.OrderByDescending(d => d.DirectorAge) : directors.OrderBy(d => d.DirectorAge),
+                "experience" => order == "desc"
+                    ? directors.OrderByDescending(d => int.TryParse(d.DirectorExperience, out var exp) ? exp : 0)
+                    : directors.OrderBy(d => int.TryParse(d.DirectorExperience, out var exp) ? exp : 0),
+                "name" => order == "desc" ? directors.OrderByDescending(d => d.DirectorName) : directors.OrderBy(d => d.DirectorName),
+                _ => directors
+            };
+
+            return Ok(sorted);
+        }
+
     }
 }

@@ -58,6 +58,16 @@ namespace API_Assessment.Controllers
             await _genericservice.SavetoDB();
             return NoContent();
         }
-
+        [HttpGet("byDateRange")]
+        public async Task<IActionResult> GetByDateRange(DateOnly start, DateOnly end)
+        {
+            var allRatings = await _genericservice.GetAll();
+            var filtered = allRatings
+                .Where(r => r.RatingDate >= start && r.RatingDate <= end)
+                .ToList();
+            if (!filtered.Any())
+                return NotFound("No ratings found in this date range.");
+            return Ok(filtered);
+        }
     }
 }

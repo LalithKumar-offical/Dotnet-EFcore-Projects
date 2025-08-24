@@ -21,11 +21,9 @@ namespace API_codefirst.Service
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.UserName!),
-                // Correctly add the user's role to the claims
                 new Claim(ClaimTypes.Role, user.UserRole!),
                 new Claim("UserAdult", user.UserAdult.ToString()!)
             };
-
             var cred = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
             var tokenDescription = new SecurityTokenDescriptor
             {
